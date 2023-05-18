@@ -27,7 +27,7 @@
               "../node_modules/bootstrap-css-only/css/bootstrap.min.css"
             ],
             "scripts": [
-              "../node_modules/libheif-js/libheif/libheif.js"
+              
             ]
           },
           "configurations": {
