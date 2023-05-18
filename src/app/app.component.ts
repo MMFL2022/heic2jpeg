@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import libheif from 'libheif-js';
+import { stopwatch } from './stopwatch';
 // declare var libheif;
 @Component({
   selector: 'my-app',
@@ -7,6 +8,8 @@ import libheif from 'libheif-js';
 })
 export class AppComponent {
   title = 'heic2jpg';
+  
+  stopwatcher = stopwatch();
 
   file: any;
   filename;
@@ -17,7 +20,9 @@ export class AppComponent {
   container;
   showImage(image) {
     this.canvas.width = this.canvas.height = 0;
+    console.log('drawing image ' + this.stopwatcher.ms);
     this.drawer.draw(image);
+    console.log('done ' + this.stopwatcher.ms);
   }
   saveImage(format?) {
     if (!format) {
@@ -106,7 +111,9 @@ export class AppComponent {
     this.canvas = document.getElementById('canvas');
     this.drawer = new CanvasDrawer(this.canvas);
     this.decoder = new libheif.HeifDecoder();
+    console.log('decoding image ' + this.stopwatcher.ms);
     this.image_data = this.decoder.decode(buffer);
+    console.log('decoded image ' + this.stopwatcher.ms, this.image_data);
 
     if (!this.image_data || !this.image_data.length) {
       this.showImage(this.image_data[0]);
@@ -135,18 +142,23 @@ export class AppComponent {
     return e => {
       setTimeout(() => {
         var buffer = e.target.result;
+        console.log('readerOnLoad ' + this.stopwatcher.ms);
         if (!this.loadBuffer(buffer, file.name)) {
-          console.log('buffer loaded');
+          console.log('buffer loaded' + this.stopwatcher.ms);
         }
       }, 1);
     };
   }
   
   selectFile(event) {
+    this.stopwatcher.reset();
+
     this.file = event.target.files[0];
     var reader = new FileReader();
     reader.onload = this.readerOnLoad.call(this, this.file);
     reader.readAsArrayBuffer(this.file);
+
+    console.log('file selected ' + this.stopwatcher.ms);
   }
 
 }
