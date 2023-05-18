@@ -1,0 +1,10 @@
+<label>Select File</label>
+<div>
+  <input type="file" (change)="selectFile($event)" />
+  <div>
+    <button (click)="saveImage()">Save</button>
+  </div>
+  <div id="container">
+    <canvas id="canvas" width="3992" height="2992"></canvas>
+  </div>
+</div>
